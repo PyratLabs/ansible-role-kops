@@ -1,0 +1,23 @@
+---
+
+- name: Check where bash is installed
+  command: which bash
+  register: kops_check_bash_path
+  failed_when: false
+  changed_when: false
+
+- name: Check for existing kops binary
+  stat:
+    path: "{{ kops_install_dir }}/kops"
+  register: kops_check_existing
+
+- name: Check kops binary version if binary already exists
+  shell: >
+    set -o pipefail && \
+      {{ kops_install_dir }}/kops version | \
+      awk '{ print $2 }' | sed 's/^v//'
+  args:
+    executable: "{{ kops_check_bash_path.stdout_lines[0] }}"
+  changed_when: false
+  register: kops_check_existing_version
+  when: kops_check_existing.stat.exists

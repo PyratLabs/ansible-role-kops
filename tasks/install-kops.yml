@@ -1,0 +1,31 @@
+---
+
+- name: Ensure kops_install_dir exists
+  file:
+    path: "{{ kops_install_dir }}"
+    state: directory
+
+- name: Ensure existing kops package is moved to keep an copy of the old version
+  command: >
+      mv {{ kops_install_dir }}/kops
+      {{ kops_install_dir }}/kops-{{ kops_check_existing_version.stdout_lines[0] }}
+  when:
+    kops_check_existing.stat.islnk is defined
+    and not kops_check_existing.stat.islnk
+    and kops_check_existing_version.stdout_lines[0] != kops_version
+
+- name: Ensure kops binary is copied to the installation directory
+  copy:
+    src: "/tmp/kops-{{ kops_version }}"
+    dest: "{{ kops_install_dir }}/kops-{{ kops_version }}"
+    remote_src: true
+    mode: 0755
+  when: not kops_check_existing.stat.exists
+        or (kops_check_existing.stat.exists
+            and kops_check_existing_version.stdout_lines[0] != kops_version)
+
+- name: Ensure kops package is symlinked
+  file:
+    src: "{{ kops_install_dir }}/kops-{{ kops_version }}"
+    dest: "{{ kops_install_dir }}/kops"
+    state: link

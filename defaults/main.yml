@@ -1,0 +1,7 @@
+---
+
+# Use a specific version of kops, eg. `1.15.0`. Specify `false` for latest.
+kops_version: false
+
+# Installation directory for kops.
+kops_install_dir: "{{ ansible_user_dir }}/bin"

@@ -1,0 +1,13 @@
+---
+
+kops_arch_lookup:
+  amd64:
+    arch: amd64
+    suffix: "amd64"
+  x86_64:
+    arch: amd64
+    suffix: "amd64"
+
+kops_github_url: https://github.com/kubernetes/kops
+kops_github_api: https://api.github.com/repos/kubernetes/kops
+kops_github_download_url: "{{ kops_github_url }}/releases/download"

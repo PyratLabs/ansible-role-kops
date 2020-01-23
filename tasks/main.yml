@@ -1,0 +1,12 @@
+---
+
+- import_tasks: pre-checks.yml
+
+- import_tasks: get-version.yml
+  when: kops_version is not defined or not kops_version
+
+- import_tasks: download-kops.yml
+
+- import_tasks: install-kops.yml
+
+- import_tasks: post-checks.yml

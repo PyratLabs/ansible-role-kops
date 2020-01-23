@@ -1,0 +1,16 @@
+---
+
+- name: Ensure target host architecture information is set as a fact
+  set_fact:
+    kops_arch: "{{ kops_arch_lookup[ansible_architecture].arch }}"
+    kops_arch_suffix: "{{ kops_arch_lookup[ansible_architecture].suffix }}"
+
+- name: Get the binary path for kops
+  set_fact:
+    kops_binary_path: "{{ kops_version }}/kops-linux-{{ kops_arch_suffix }}"
+
+- name: Ensure kops binary is downloaded
+  get_url:
+    url: "{{ kops_github_download_url }}/{{ kops_binary_path }}"
+    dest: "/tmp/kops-{{ kops_version }}"
+    mode: 0600
