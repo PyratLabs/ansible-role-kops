@@ -7,7 +7,7 @@
 
 - name: Get the binary path for kops
   set_fact:
-    kops_binary_path: "{{ kops_version }}/kops-linux-{{ kops_arch_suffix }}"
+    kops_binary_path: "v{{ kops_version }}/kops-linux-{{ kops_arch_suffix }}"
 
 - name: Ensure kops binary is downloaded
   get_url:
